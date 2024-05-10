@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .form-container {
+            background-color: rgb(133, 191, 178);
+            width: 100% fit-content;
+            margin: auto;
+            border-radius: 50px; 
+            border: 5px solid black;
+            text-align: center;
+        } 
+
+        table {
+            margin: 20px;
+            padding: 5px;
+        }
+
+        table, th, td {
+            border: 2px solid black;
+        }
+        
+        th {
+            background-color: grey;
+        }
+        td {
+            background-color: rgb(187, 185, 106);
+        }
+
+        input {
+            margin-bottom: 5px;
+        }
+        
+        button {
+            background-color: grey;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            margin: 1px;
+            cursor: pointer;
+        }
+        
+        .botonAgregar {
+            background-color: green;
+        }
+
+        .botonCancelar{
+            background-color: black;
+            color: white;
+        }
+
+        .botonModificar{
+            background-color: yellow;
+        }
+
+        .botonEliminar{
+            background-color: red;
+        }
+
+        input[disabled] {
+            background-color: white;
+            color: #888; 
+        }  
+       
+    </style>
+    
+</head>
+<body style="display: flex;">
+    
+    <div class="form-container">
+        <form id="formAbm" style="display: none;" class="form-Abm" index="-1">
+              <t1>CARGAR</t1> </br>
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required><br>
+        
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required><br>
+        
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" name="edad"><br>
+        
+            <label for="sueldo" id="labelSueldo">Sueldo:</label>
+            <input type="string" id="sueldo" name="sueldo"><br>
+            
+            <label for="ventas" id="labelVentas">Ventas:</label>
+            <input type="text" id="ventas" name="ventas" ><br>
+                        
+            <label for="compras" id="labelCompras">Compras:</label>
+            <input type="text" id="compras" name="compras" disabled><br>
+                        
+            <label for="telefono" id="labelTelefono">Telefono:</label>
+            <input type="number" id="telefono" name="telefono" disabled><br>
+        
+            <label for="tipoPersona">Selecciona el tipo de persona:</label>
+            <select id="tipoPersona" name="tipoPersona" onchange="actualizarInput(this.value)">
+                <option value="empleado">Empleado</option>
+                <option value="cliente">Cliente</option>
+            </select><br><br>
+        
+            <button type="button" id="botonAgregar" class="botonAgregar" onclick="mostrarForm(); cargarPersona(tipoPersona.value, generarPersona());">Agregar</button>
+            <button type="button" id="botonModificar" class="botonModificar" onclick="mostrarForm(); modificarTabla()">Modificar</button><br>
+            <button type="button" id="botonEliminar" class="botonEliminar" onclick="mostrarForm(); EliminarFilaTabla()">Eliminar</button>
+            <button type="button" id="botonCancelar" class="botonCancelar" onclick="mostrarForm()">Cancelar</button><br>   </br>
+
+    
+        </form>
+
+
+        <Datos id="datosTabla"> 
+            <Form id="formTabla"> 
+                <h1 >Form Datos</h1>
+                <label for="filtroPersona">Filtrar Por:</label>
+                <select id="filtroPersona" name="filtroPersona" onchange="filtrarDatos(this.value)">
+                    <option value="todos">Todos</option>
+                    <option value="empleado">Empleado</option>
+                    <option value="cliente">Cliente</option>
+                </select><br><br>
+
+                <label for="promedio">Calcular edad Promedio:</label>
+                <input type="number" id="promedio"  name="promedio" required readonly>
+                <button type="button" class="botonCalcular" onclick="calcularEdadPromedio()">Calcular</button> </br>
+        
+                <label >Mostrar Columnas:</label></br>
+        
+                <label for="checkboxId"> ID</label> 
+                <input type="checkbox" id="checkboxId" name="checkboxId" onclick="ocultarFila(0)" checked>
+
+                <label for="checkboxNombre">| Nombre</label> 
+                <input type="checkbox" id="checkboxNombre" name="checkboxNombre" onclick="ocultarFila(1)" checked>
+                
+                <label for="checkboxApellido">| Apellido</label>
+                <input type="checkbox" id="checkboxAnoFabApellido" name="checkboxApellido" onclick="ocultarFila(2)"checked>
+                
+                <label for="checkboxEdad">| Edad</label>
+                <input type="checkbox" id="checkboxEdad" name="checkboxEdad" onclick="ocultarFila(3)"checked>
+                
+                <label for="checkboxSueldo">| Sueldo</label>
+                <input type="checkbox" id="checkboxSueldo" name="checkboxAlterEgi" onclick="ocultarFila(4)"checked>
+                
+                <label for="checkboxVentas">| Ventas</label>
+                <input type="checkbox" id="checkboxVentas" name="checkboxVentas" onclick="ocultarFila(5)"checked>
+                            
+                <label for="checkboxCompras">| Compras</label>
+                <input type="checkbox" id="checkboxCompras" name="checkboxCompras" onclick="ocultarFila(6)"checked>
+
+                <label for="checkboxTelefono">| Telefono</label>
+                <input type="checkbox" id="checkboxTelefono" name="checkboxTelefono" onclick="ocultarFila(7)"checked>
+            </Form>
+
+            <div id="tablaDatos"> 
+                <table id="tablaPersonas" ondblclick="mostrarFormConDatos(this)">
+                    <tr>
+                        <th><button onclick="ordenarPor(0)">ID</button></th>
+                        <th><button onclick="ordenarPor(1)">Nombre</button></th>
+                        <th><button onclick="ordenarPor(2)">Apellido</button></th>
+                        <th><button onclick="ordenarPor(3)">Edad</button></th>
+                        <th><button onclick="ordenarPor(4)">Sueldo</button></th>
+                        <th><button onclick="ordenarPor(5)">Ventas</button></th>
+                        <th><button onclick="ordenarPor(6)">Compras</button></th>
+                        <th><button onclick="ordenarPor(7)">Telefono</button></th>
+                    </tr>
+                </table>
+                <button type="button" id="botonAgregar" class="botonAgregar" onclick="mostrarForm()">Agregar</button>
+            </div>    
+        </Datos>
+       
+    <script src="labo3PP.js"></script>
+    
+</body>
+</html>
