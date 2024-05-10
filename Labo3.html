@@ -83,22 +83,16 @@
             <label for="edad">Edad:</label>
             <input type="number" id="edad" name="edad"><br>
         
-            <label for="sueldo" id="labelSueldo">Sueldo:</label>
-            <input type="string" id="sueldo" name="sueldo"><br>
-            
-            <label for="ventas" id="labelVentas">Ventas:</label>
-            <input type="text" id="ventas" name="ventas" ><br>
-                        
-            <label for="compras" id="labelCompras">Compras:</label>
-            <input type="text" id="compras" name="compras" disabled><br>
-                        
-            <label for="telefono" id="labelTelefono">Telefono:</label>
-            <input type="number" id="telefono" name="telefono" disabled><br>
-        
+            <label for="dni" id="labelDni">Dni:</label>
+            <input type="string" id="dni" name="dni"><br>
+                                    
+            <label for="paisOrigen" id="labelPaisOrigen">PaisOrigen:</label>
+            <input type="text" id="paisOrigen" name="paisOrigen" disabled><br>
+                                
             <label for="tipoPersona">Selecciona el tipo de persona:</label>
             <select id="tipoPersona" name="tipoPersona" onchange="actualizarInput(this.value)">
-                <option value="empleado">Empleado</option>
-                <option value="cliente">Cliente</option>
+                <option value="ciudadano">Ciudadano</option>
+                <option value="extranjero">Extranjero</option>
             </select><br><br>
         
             <button type="button" id="botonAgregar" class="botonAgregar" onclick="mostrarForm(); cargarPersona(tipoPersona.value, generarPersona());">Agregar</button>
@@ -116,8 +110,8 @@
                 <label for="filtroPersona">Filtrar Por:</label>
                 <select id="filtroPersona" name="filtroPersona" onchange="filtrarDatos(this.value)">
                     <option value="todos">Todos</option>
-                    <option value="empleado">Empleado</option>
-                    <option value="cliente">Cliente</option>
+                    <option value="ciudadano">ciudadano</option>
+                    <option value="extranjero">extranjero</option>
                 </select><br><br>
 
                 <label for="promedio">Calcular edad Promedio:</label>
@@ -138,17 +132,11 @@
                 <label for="checkboxEdad">| Edad</label>
                 <input type="checkbox" id="checkboxEdad" name="checkboxEdad" onclick="ocultarFila(3)"checked>
                 
-                <label for="checkboxSueldo">| Sueldo</label>
-                <input type="checkbox" id="checkboxSueldo" name="checkboxAlterEgi" onclick="ocultarFila(4)"checked>
-                
-                <label for="checkboxVentas">| Ventas</label>
-                <input type="checkbox" id="checkboxVentas" name="checkboxVentas" onclick="ocultarFila(5)"checked>
-                            
-                <label for="checkboxCompras">| Compras</label>
-                <input type="checkbox" id="checkboxCompras" name="checkboxCompras" onclick="ocultarFila(6)"checked>
-
-                <label for="checkboxTelefono">| Telefono</label>
-                <input type="checkbox" id="checkboxTelefono" name="checkboxTelefono" onclick="ocultarFila(7)"checked>
+                <label for="checkboxDni">| Dni</label>
+                <input type="checkbox" id="checkboxDni" name="checkboxAlterEgi" onclick="ocultarFila(4)"checked>
+                                            
+                <label for="checkboxPaisOrigen">| PaisOrigen</label>
+                <input type="checkbox" id="checkboxPaisOrigen" name="checkboxPaisOrigen" onclick="ocultarFila(5)"checked>
             </Form>
 
             <div id="tablaDatos"> 
@@ -158,10 +146,8 @@
                         <th><button onclick="ordenarPor(1)">Nombre</button></th>
                         <th><button onclick="ordenarPor(2)">Apellido</button></th>
                         <th><button onclick="ordenarPor(3)">Edad</button></th>
-                        <th><button onclick="ordenarPor(4)">Sueldo</button></th>
-                        <th><button onclick="ordenarPor(5)">Ventas</button></th>
-                        <th><button onclick="ordenarPor(6)">Compras</button></th>
-                        <th><button onclick="ordenarPor(7)">Telefono</button></th>
+                        <th><button onclick="ordenarPor(4)">Dni</button></th>
+                        <th><button onclick="ordenarPor(5)">PaisOrigen</button></th>
                     </tr>
                 </table>
                 <button type="button" id="botonAgregar" class="botonAgregar" onclick="mostrarForm()">Agregar</button>

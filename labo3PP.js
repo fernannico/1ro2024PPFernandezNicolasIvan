@@ -2,7 +2,7 @@ var formulario = document.getElementById("formDatos");
 var botonAgregar = document.getElementById("botonAgregar");
 var table = document.getElementById("tablaPersonas");
 
-var cadena = '[{"id":1, "nombre":"Marcelo", "apellido":"Luque", "edad":45, "ventas":15000, "sueldo":2000},{"id":2,"nombre":"Ramiro", "apellido":"Escobar", "edad":35, "ventas": 6000, "sueldo": 1000},{"id":3, "nombre":"Facundo","apellido":"Cairo", "edad":30, "ventas":500, "sueldo":15000},{"id":4, "nombre":"Fernando", "apellido":"Nieto","edad":18, "compras":8000, "telefono":"152111131"},{"id":5, "nombre":"Manuel", "apellido":"Loza", "edad":20,"compras":50000, "telefono":"42040077"},{"id":666, "nombre":"Nicolas", "apellido":"Serrano", "edad":23,"compras":7000, "telefono":"1813181563"}]';
+var cadena = '[{"id":1,"apellido":"Serrano","nombre":"Horacio","edad":19840103,"dni":45876942},{"id":2,"apellido":"Casas","nombre":"Julian","edad":19990723,"dni":98536214},{"id":3,"apellido":"Galeano","nombre":"Julieta","edad":20081103,"dni":74859612},{"id":4,"apellido":"Molina","nombre":"Juana","edad":19681201,"paisOrigen":"Paraguay"},{"id":5,"apellido":"Barrichello","nombre":"Rubens","edad":19720523,"paisOrigen":"Brazil"},{"id":666,"apellido":"Hkkinen","nombre":"Mika","edad":19680928,"paisOrigen":"Finlandia"}]';
 
 // clase de persona
 class Persona {
@@ -21,27 +21,23 @@ class Persona {
     toString(){}
 }
 
-// clase de empleado
-class Empleado extends Persona {
-    sueldo;     
-    ventas; 
+// clase de ciudadano
+class Ciudadano extends Persona {
+    dni;     
 
-    constructor(sueldo, ventas,  id, nombre, apellido, edad) {
+    constructor(dni,  id, nombre, apellido, edad) {
         super(id, nombre, apellido, edad);
-        this.sueldo = sueldo;
-        this.ventas = ventas;
+        this.dni = dni;
     } 
 }
 
-// clase de cliente
-class Cliente extends Persona {    
-    compras;    
-    telefono;  
+// clase de extranjero
+class Extranjero extends Persona {    
+    paisOrigen;    
 
-    constructor(compras, telefono,  id, nombre, apellido, edad) {
+    constructor(paisOrigen,  id, nombre, apellido, edad) {
         super(id, nombre, apellido, edad);
-        this.compras = compras;
-        this.telefono = telefono;
+        this.paisOrigen = paisOrigen;
     }  
 }
 
@@ -52,12 +48,12 @@ function toString(cadenaDatos) {
     let arrayObjetos = JSON.parse(cadenaDatos);
 
     let personas = arrayObjetos.map(objeto => {
-        if ('ventas' in objeto) {
-            let empleado = new Empleado(objeto.sueldo, objeto.ventas, objeto.id, objeto.nombre, objeto.apellido, objeto.edad);
-            return empleado;
-        } else if ('telefono' in objeto) {
-            let cliente = new Cliente(objeto.compras, objeto.telefono, objeto.id, objeto.nombre, objeto.apellido, objeto.edad);
-            return cliente;
+        if ('dni' in objeto) {
+            let ciudadano = new Ciudadano(objeto.dni, objeto.id, objeto.nombre, objeto.apellido, objeto.edad);
+            return ciudadano;
+        } else if ('paisOrigen' in objeto) {
+            let extranjero = new Extranjero(objeto.paisOrigen, objeto.id, objeto.nombre, objeto.apellido, objeto.edad);
+            return extranjero;
         } else {
             return new Persona(objeto.id, objeto.nombre, objeto.apellido, objeto.edad);
         }
@@ -79,30 +75,28 @@ function generarPersona() {
     var nombre = document.getElementById("nombre").value;
     var apellido = document.getElementById("apellido").value;
     var edad = document.getElementById("edad").value;
-    var sueldo = document.getElementById("sueldo").value;
-    var ventas = document.getElementById("ventas").value;
-    var compras = document.getElementById("compras").value;
-    var telefono = document.getElementById("telefono").value;
+    var dni = document.getElementById("dni").value;
+    var paisOrigen = document.getElementById("paisOrigen").value;
 
     var id = generarId();
 
     let tipoPersona = document.getElementById("tipoPersona").value;
 
-    if (tipoPersona === "empleado") {
-        return new Empleado(sueldo, ventas, id, nombre, apellido, edad);
+    if (tipoPersona === "ciudadano") {
+        return new Ciudadano(dni, id, nombre, apellido, edad);
     } else {
-        return new Cliente(compras, telefono, id,  nombre, apellido, edad);
+        return new Extranjero(paisOrigen, id,  nombre, apellido, edad);
     }
 
 }
 
 function obtenerTipo(persona)
 {
-    if(persona.hasOwnProperty('telefono'))
+    if(persona.hasOwnProperty('paisOrigen'))
     {
-        return "cliente";
+        return "extranjero";
     }else{
-        return "empleado";
+        return "ciudadano";
     }
 }
 
@@ -119,31 +113,23 @@ function cargarPersona(tipo, persona) {
             var cellNombre = newRow.insertCell(1);
             var cellApellido = newRow.insertCell(2);
             var cellEdad = newRow.insertCell(3);
-            var cellSueldo = newRow.insertCell(4);
-            var cellVentas = newRow.insertCell(5);
-            var cellCompras = newRow.insertCell(6);
-            var cellTelefono = newRow.insertCell(7);
+            var cellDni = newRow.insertCell(4);
+            var cellPaisOrigen = newRow.insertCell(5);
 
             cellId.innerHTML = persona.id;
             cellNombre.innerHTML = persona.nombre;
             cellApellido.innerHTML = persona.apellido;
             cellEdad.innerHTML = persona.edad;
 
-            if (persona instanceof Empleado) {
-                cellSueldo.innerHTML = persona.sueldo || "-";
-                cellVentas.innerHTML = persona.ventas || "-";
-                cellCompras.innerHTML = "-";
-                cellTelefono.innerHTML = "-";
-            } else if (persona instanceof Cliente) {
-                cellSueldo.innerHTML = "-";
-                cellVentas.innerHTML = "-";
-                cellCompras.innerHTML = persona.compras || "-";
-                cellTelefono.innerHTML = persona.telefono || "-";
+            if (persona instanceof Ciudadano) {
+                cellDni.innerHTML = persona.dni || "-";
+                cellPaisOrigen.innerHTML = "-";
+            } else if (persona instanceof Extranjero) {
+                cellDni.innerHTML = "-";
+                cellPaisOrigen.innerHTML = persona.paisOrigen || "-";
             } else {
-                cellSueldo.innerHTML = "-";
-                cellVentas.innerHTML = "-";
-                cellCompras.innerHTML = "-";
-                cellTelefono.innerHTML = "-";
+                cellDni.innerHTML = "-";
+                cellPaisOrigen.innerHTML = "-";
             }
         }else{
             alert("error, verificar datos");
@@ -154,18 +140,16 @@ function cargarPersona(tipo, persona) {
 }
     
 // modifica la persona de listaPersonas
-function modificarPersona(index, nombre, apellido, edad, nuevoSueldo, nuevaVenta, nuevaCompra, nuevoTelefono) {
+function modificarPersona(index, nombre, apellido, edad, nuevoDni, nuevoPaisOrigen) {
     if (index >= 0 && index < listaPersonas.length) {
         listaPersonas[index].nombre = nombre;
         listaPersonas[index].apellido = apellido;
         listaPersonas[index].edad = edad;
 
-        if (listaPersonas[index] instanceof Empleado) {
-            listaPersonas[index].sueldo = nuevoSueldo;
-            listaPersonas[index].ventas = nuevaVenta;
-        } else if (listaPersonas[index] instanceof Cliente) {
-            listaPersonas[index].compras = nuevaCompra;
-            listaPersonas[index].telefono = nuevoTelefono;
+        if (listaPersonas[index] instanceof Ciudadano) {
+            listaPersonas[index].dni = nuevoDni;
+        } else if (listaPersonas[index] instanceof Extranjero) {
+            listaPersonas[index].paisOrigen = nuevoPaisOrigen;
         }
 
         console.log("Persona modificada:", listaPersonas[index].nombre);
@@ -175,38 +159,25 @@ function modificarPersona(index, nombre, apellido, edad, nuevoSueldo, nuevaVenta
 }
 
 function actualizarInput(tipoPersona) {
-    var sueldoInput = document.getElementById("sueldo");
-    var ventasInput = document.getElementById("ventas");
-    var comprasInput = document.getElementById("compras");
-    var telefonoInput = document.getElementById("telefono");
+    var dniInput = document.getElementById("dni");
+    var paisOrigenInput = document.getElementById("paisOrigen");
 
-    sueldoInput.disabled = false;
-    ventasInput.disabled = false;
-    comprasInput.disabled = false;
-    telefonoInput.disabled = false;
+    dniInput.disabled = false;
+    paisOrigenInput.disabled = false;
 
-    sueldoInput.value = "";
-    ventasInput.value = "";
-    comprasInput.value = "";
-    telefonoInput.value = "";
+    dniInput.value = "";
+    paisOrigenInput.value = "";
 
-    sueldoInput.style.visibility = 'hidden';
-    ventasInput.style.visibility = 'hidden';
-    comprasInput.style.visibility = 'hidden';
-    telefonoInput.style.visibility = 'hidden';
+    dniInput.style.visibility = 'hidden';
+    paisOrigenInput.style.visibility = 'hidden';
 
-    if (tipoPersona === "empleado") {
-        sueldoInput.style.visibility = 'visible';
-        ventasInput.style.visibility = 'visible';    
-        comprasInput.disabled = true;
-        telefonoInput.disabled = true;
+    if (tipoPersona === "ciudadano") {
+        dniInput.style.visibility = 'visible';
+        paisOrigenInput.disabled = true;
    
-    } else if (tipoPersona === "cliente") {
-        comprasInput.style.visibility = 'visible';
-        telefonoInput.style.visibility = 'visible';
-        sueldoInput.disabled = true;
-        ventasInput.disabled = true;
-
+    } else if (tipoPersona === "extranjero") {
+        paisOrigenInput.style.visibility = 'visible';
+        dniInput.disabled = true;
     }
     
 }
@@ -223,12 +194,12 @@ function buscarPersona(id) {
 
 function validar(tipoPersona, persona) {
     if (persona.nombre !== "" && persona.apellido !== "" && persona.edad !== "" && persona.edad > -1) {
-        if (tipoPersona === "empleado") {
-            if (persona.sueldo !== "" && persona.ventas !== "") {
+        if (tipoPersona === "ciudadano") {
+            if (persona.dni !== "") {
                 return true;
             }
-        } else if (tipoPersona === "cliente") {
-            if (persona.compras !== "" && persona.telefono !== "" && persona.telefono > 0) {
+        } else if (tipoPersona === "extranjero") {
+            if (persona.paisOrigen !== "") {
                 return true;
             }
         }
@@ -262,16 +233,18 @@ function calcularEdadPromedio() {
 function cambiarFiltro() {
     var filtro = document.getElementById("filtroPersona").value;
 
-    if (filtro === "Empleado") {
+    if (filtro === "ciudadano") {
         vaciarTabla();
-        cargarListaPersonas(listaEmpleados);
-    } else if (filtro === "Cliente") {
+        cargarListaPersonas(listaCiudadanos);
+    } else if (filtro === "extranjero") {
         vaciarTabla();
-        cargarListaPersonas(listaClientes);
+        cargarListaPersonas(listaExtranjeros);
     } else {
         vaciarTabla();
         cargarListaPersonas(listaPersonas);
     }
+
+    filtrarDatos(filtro);
 }
 
 function vaciarTabla() {
@@ -300,10 +273,10 @@ function generarId() {
 
 function cargarPersonas() {
     for (var i = 0; i < listaPersonas.length; i++) {
-        if (listaPersonas[i] instanceof Cliente) {
-            listaClientes.push(listaPersonas[i]);
-        } else if (listaPersonas[i] instanceof Empleado) {
-            listaEmpleados.push(listaPersonas[i]);
+        if (listaPersonas[i] instanceof Extranjero) {
+            listaExtranjeros.push(listaPersonas[i]);
+        } else if (listaPersonas[i] instanceof Ciudadano) {
+            listaCiudadanos.push(listaPersonas[i]);
         }
     }
 }
@@ -335,7 +308,7 @@ function mostrarForm() {
 
 }
 
-// puede cambiar de empleado a cliente en caso de error
+// puede cambiar de ciudadano a extranjero en caso de error
 function mostrarFormConDatos(tabla)
 {
     var formulario = document.getElementById("formAbm");
@@ -348,11 +321,8 @@ function mostrarFormConDatos(tabla)
     var nombre = celdas[1].innerText;
     var apellido = celdas[2].innerText;
     var edad = celdas[3].innerText;
-    var sueldo = celdas[4].innerText;
-    var ventas = celdas[5].innerText;
-    var compras = celdas[6].innerText;
-    var telefono = celdas[7].innerText;
-
+    var dni = celdas[4].innerText;
+    var paisOrigen = celdas[5].innerText;
 
     var index = fila.rowIndex;
     var formAbm = document.getElementById("formAbm");
@@ -362,17 +332,17 @@ function mostrarFormConDatos(tabla)
 
     var indexForm = formAbm.getAttribute("index");
 
-    cargarForm(nombre, apellido, edad, sueldo, ventas, compras, telefono, index)
+    cargarForm(nombre, apellido, edad, dni, paisOrigen, index)
 
     formulario.style.display = (formulario.style.display === "none") ? "block" : "none";
     datosTabla.style.display = (datosTabla.style.display === "none") ? "block" : "none";
 }
 
-function cargarForm(nombre, apellido, edad, sueldo, ventas, compras, telefono, index)
+function cargarForm(nombre, apellido, edad, dni, paisOrigen, index)
 {
 
 
-    if (nombre !== null && apellido !== null && edad !== null && sueldo !== null && ventas !== null && compras !== null && telefono !== null) {
+    if (nombre !== null && apellido !== null && edad !== null && dni !== null && paisOrigen !== null) {
 
         document.getElementById("nombre").value = nombre;
         document.getElementById("apellido").value = apellido;
@@ -395,14 +365,12 @@ function modificarTabla(tabla)
     var nombre = document.getElementById("nombre").value;
     var apellido = document.getElementById("apellido").value;
     var edad = document.getElementById("edad").value;
-    var sueldo = document.getElementById("sueldo").value;
-    var ventas = document.getElementById("ventas").value;
-    var compras = document.getElementById("compras").value;
-    var telefono = document.getElementById("telefono").value;
+    var dni = document.getElementById("dni").value;
+    var paisOrigen = document.getElementById("paisOrigen").value;
 
     if(validar(tipoPersona.value, generarPersona()) == true) {
-        modificarPersona(index-1, nombre, apellido, edad, sueldo, ventas, compras, telefono);
-        actualizarTabla(index, nombre, apellido, edad, sueldo, ventas, compras, telefono);
+        modificarPersona(index-1, nombre, apellido, edad, dni, paisOrigen);
+        actualizarTabla(index, nombre, apellido, edad, dni, paisOrigen);
         alert("Modificado con exito");
     }else
     {
@@ -430,17 +398,15 @@ function EliminarFilaTabla() {
 }
 
 
-function actualizarTabla(index, nombre, apellido, edad, sueldo, ventas, compras, telefono) {
+function actualizarTabla(index, nombre, apellido, edad, dni, paisOrigen) {
     var fila = document.getElementById("tablaPersonas").rows[index];
 
     if (fila) {
         fila.cells[1].textContent = nombre;
         fila.cells[2].textContent = apellido;
         fila.cells[3].textContent = edad;
-        fila.cells[4].textContent = sueldo || '-';
-        fila.cells[5].textContent = ventas || '-';
-        fila.cells[6].textContent = compras || '-';
-        fila.cells[7].textContent = telefono || '-';
+        fila.cells[4].textContent = dni || '-';
+        fila.cells[5].textContent = paisOrigen || '-';
 
     }
 }
@@ -464,12 +430,12 @@ function filtrarDatos(filtro) {
     var filas = tabla.rows;
 
     for (var i = 0; i < filas.length; i++) {
-        var sueldo = filas[i].cells[4].textContent; 
-        var compras = filas[i].cells[7].textContent; 
+        var dni = filas[i].cells[4].textContent; 
+        var paisOrigen = filas[i].cells[5].textContent; 
 
-        if (filtro === "empleado" && sueldo == "-") {
+        if (filtro === "ciudadano" && dni == "-") {
             filas[i].style.display = "none";
-        } else if (filtro === "cliente" && compras == "-") {
+        } else if (filtro === "extranjero" && paisOrigen == "-") {
             filas[i].style.display = "none";
         } else{
             filas[i].style.display = "table-row";
@@ -492,7 +458,7 @@ function restablecerForm() {
 function ordenarPor(columna) {
     var tabla = document.getElementById("tablaPersonas");
     var filas = tabla.rows;
-    var esNumerico = ["id", "edad", "telefono"];
+    var esNumerico = ["id", "edad", "dni"];
 
     var filasArray = Array.from(filas);
 
@@ -544,11 +510,8 @@ function obtenerArrayPersonas() {
             nombre: celdas[1].textContent,
             apellido: celdas[2].textContent,
             edad: celdas[3].textContent,
-            sueldo: celdas[4].textContent,
-            ventas: celdas[5].textContent,
-            compras: celdas[6].textContent,
-            telefono: celdas[7].textContent
-
+            dni: celdas[4].textContent,
+            paisOrigen: celdas[5].textContent,
         };
         arrayPersonas.push(persona);
     }
