@@ -80,8 +80,8 @@
             <label for="apellido">Apellido:</label>
             <input type="text" id="apellido" name="apellido" required><br>
         
-            <label for="edad">Edad:</label>
-            <input type="number" id="edad" name="edad"><br>
+            <label for="fechaNacimiento">Fecha Nacimiento:</label>
+            <input type="number" id="fechaNacimiento" name="fechaNacimiento"><br>
         
             <label for="dni" id="labelDni">Dni:</label>
             <input type="string" id="dni" name="dni"><br>
@@ -96,7 +96,7 @@
             </select><br><br>
         
             <button type="button" id="botonAgregar" class="botonAgregar" onclick="mostrarForm(); cargarPersona(tipoPersona.value, generarPersona());">Agregar</button>
-            <button type="button" id="botonModificar" class="botonModificar" onclick="mostrarForm(); modificarTabla()">Modificar</button><br>
+            <button type="button" id="botonModificar" class="botonModificar" onclick="mostrarForm(); modificarTabla()">Modificar</button>
             <button type="button" id="botonEliminar" class="botonEliminar" onclick="mostrarForm(); EliminarFilaTabla()">Eliminar</button>
             <button type="button" id="botonCancelar" class="botonCancelar" onclick="mostrarForm()">Cancelar</button><br>   </br>
 
@@ -129,8 +129,8 @@
                 <label for="checkboxApellido">| Apellido</label>
                 <input type="checkbox" id="checkboxAnoFabApellido" name="checkboxApellido" onclick="ocultarFila(2)"checked>
                 
-                <label for="checkboxEdad">| Edad</label>
-                <input type="checkbox" id="checkboxEdad" name="checkboxEdad" onclick="ocultarFila(3)"checked>
+                <label for="checkboxFechaNacimiento">| Fecha Nacimiento</label>
+                <input type="checkbox" id="checkboxFechaNacimiento" name="checkboxFechaNacimiento" onclick="ocultarFila(3)"checked>
                 
                 <label for="checkboxDni">| Dni</label>
                 <input type="checkbox" id="checkboxDni" name="checkboxAlterEgi" onclick="ocultarFila(4)"checked>
@@ -145,7 +145,7 @@
                         <th><button onclick="ordenarPor(0)">ID</button></th>
                         <th><button onclick="ordenarPor(1)">Nombre</button></th>
                         <th><button onclick="ordenarPor(2)">Apellido</button></th>
-                        <th><button onclick="ordenarPor(3)">Edad</button></th>
+                        <th><button onclick="ordenarPor(3)">Fecha Nacimiento</button></th>
                         <th><button onclick="ordenarPor(4)">Dni</button></th>
                         <th><button onclick="ordenarPor(5)">PaisOrigen</button></th>
                     </tr>

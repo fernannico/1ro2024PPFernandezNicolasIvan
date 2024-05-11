@@ -2,20 +2,20 @@ var formulario = document.getElementById("formDatos");
 var botonAgregar = document.getElementById("botonAgregar");
 var table = document.getElementById("tablaPersonas");
 
-var cadena = '[{"id":1,"apellido":"Serrano","nombre":"Horacio","edad":19840103,"dni":45876942},{"id":2,"apellido":"Casas","nombre":"Julian","edad":19990723,"dni":98536214},{"id":3,"apellido":"Galeano","nombre":"Julieta","edad":20081103,"dni":74859612},{"id":4,"apellido":"Molina","nombre":"Juana","edad":19681201,"paisOrigen":"Paraguay"},{"id":5,"apellido":"Barrichello","nombre":"Rubens","edad":19720523,"paisOrigen":"Brazil"},{"id":666,"apellido":"Hkkinen","nombre":"Mika","edad":19680928,"paisOrigen":"Finlandia"}]';
+var cadena = '[{"id":1,"apellido":"Serrano","nombre":"Horacio","fechaNacimiento":19840103,"dni":45876942},{"id":2,"apellido":"Casas","nombre":"Julian","fechaNacimiento":19990723,"dni":98536214},{"id":3,"apellido":"Galeano","nombre":"Julieta","fechaNacimiento":20081103,"dni":74859612},{"id":4,"apellido":"Molina","nombre":"Juana","fechaNacimiento":19681201,"paisOrigen":"Paraguay"},{"id":5,"apellido":"Barrichello","nombre":"Rubens","fechaNacimiento":19720523,"paisOrigen":"Brazil"},{"id":666,"apellido":"Hkkinen","nombre":"Mika","fechaNacimiento":19680928,"paisOrigen":"Finlandia"}]';
 
 // clase de persona
 class Persona {
     id = 0;
     nombre;
     apellido;
-    edad = 0;
+    fechaNacimiento = 0;
 
-    constructor(id, nombre, apellido, edad) {
+    constructor(id, nombre, apellido, fechaNacimiento) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.edad = edad;
+        this.fechaNacimiento = fechaNacimiento;
     }
 
     toString(){}
@@ -25,8 +25,8 @@ class Persona {
 class Ciudadano extends Persona {
     dni;     
 
-    constructor(dni,  id, nombre, apellido, edad) {
-        super(id, nombre, apellido, edad);
+    constructor(dni,  id, nombre, apellido, fechaNacimiento) {
+        super(id, nombre, apellido, fechaNacimiento);
         this.dni = dni;
     } 
 }
@@ -35,8 +35,8 @@ class Ciudadano extends Persona {
 class Extranjero extends Persona {    
     paisOrigen;    
 
-    constructor(paisOrigen,  id, nombre, apellido, edad) {
-        super(id, nombre, apellido, edad);
+    constructor(paisOrigen,  id, nombre, apellido, fechaNacimiento) {
+        super(id, nombre, apellido, fechaNacimiento);
         this.paisOrigen = paisOrigen;
     }  
 }
@@ -49,13 +49,13 @@ function toString(cadenaDatos) {
 
     let personas = arrayObjetos.map(objeto => {
         if ('dni' in objeto) {
-            let ciudadano = new Ciudadano(objeto.dni, objeto.id, objeto.nombre, objeto.apellido, objeto.edad);
+            let ciudadano = new Ciudadano(objeto.dni, objeto.id, objeto.nombre, objeto.apellido, objeto.fechaNacimiento);
             return ciudadano;
         } else if ('paisOrigen' in objeto) {
-            let extranjero = new Extranjero(objeto.paisOrigen, objeto.id, objeto.nombre, objeto.apellido, objeto.edad);
+            let extranjero = new Extranjero(objeto.paisOrigen, objeto.id, objeto.nombre, objeto.apellido, objeto.fechaNacimiento);
             return extranjero;
         } else {
-            return new Persona(objeto.id, objeto.nombre, objeto.apellido, objeto.edad);
+            return new Persona(objeto.id, objeto.nombre, objeto.apellido, objeto.fechaNacimiento);
         }
     });
 
@@ -74,7 +74,7 @@ function generarPersona() {
 
     var nombre = document.getElementById("nombre").value;
     var apellido = document.getElementById("apellido").value;
-    var edad = document.getElementById("edad").value;
+    var fechaNacimiento = document.getElementById("fechaNacimiento").value;
     var dni = document.getElementById("dni").value;
     var paisOrigen = document.getElementById("paisOrigen").value;
 
@@ -83,9 +83,9 @@ function generarPersona() {
     let tipoPersona = document.getElementById("tipoPersona").value;
 
     if (tipoPersona === "ciudadano") {
-        return new Ciudadano(dni, id, nombre, apellido, edad);
+        return new Ciudadano(dni, id, nombre, apellido, fechaNacimiento);
     } else {
-        return new Extranjero(paisOrigen, id,  nombre, apellido, edad);
+        return new Extranjero(paisOrigen, id,  nombre, apellido, fechaNacimiento);
     }
 
 }
@@ -112,14 +112,14 @@ function cargarPersona(tipo, persona) {
             var cellId = newRow.insertCell(0);
             var cellNombre = newRow.insertCell(1);
             var cellApellido = newRow.insertCell(2);
-            var cellEdad = newRow.insertCell(3);
+            var cellFechaNacimiento = newRow.insertCell(3);
             var cellDni = newRow.insertCell(4);
             var cellPaisOrigen = newRow.insertCell(5);
 
             cellId.innerHTML = persona.id;
             cellNombre.innerHTML = persona.nombre;
             cellApellido.innerHTML = persona.apellido;
-            cellEdad.innerHTML = persona.edad;
+            cellFechaNacimiento.innerHTML = persona.fechaNacimiento;
 
             if (persona instanceof Ciudadano) {
                 cellDni.innerHTML = persona.dni || "-";
@@ -140,11 +140,12 @@ function cargarPersona(tipo, persona) {
 }
     
 // modifica la persona de listaPersonas
-function modificarPersona(index, nombre, apellido, edad, nuevoDni, nuevoPaisOrigen) {
+function modificarPersona(index, nombre, apellido, fechaNacimiento, nuevoDni, nuevoPaisOrigen) {
+    
     if (index >= 0 && index < listaPersonas.length) {
         listaPersonas[index].nombre = nombre;
         listaPersonas[index].apellido = apellido;
-        listaPersonas[index].edad = edad;
+        listaPersonas[index].fechaNacimiento = fechaNacimiento;
 
         if (listaPersonas[index] instanceof Ciudadano) {
             listaPersonas[index].dni = nuevoDni;
@@ -193,7 +194,7 @@ function buscarPersona(id) {
 }
 
 function validar(tipoPersona, persona) {
-    if (persona.nombre !== "" && persona.apellido !== "" && persona.edad !== "" && persona.edad > -1) {
+    if (persona.nombre !== "" && persona.apellido !== "" && persona.fechaNacimiento !== "" && persona.fechaNacimiento > -1) {
         if (tipoPersona === "ciudadano") {
             if (persona.dni !== "") {
                 return true;
@@ -213,18 +214,24 @@ function calcularEdadPromedio() {
     var sumaEdades = 0;
 
     for (var i = 1; i < filas; i++) {
-        var celdaEdad = parseInt(table.rows[i].cells[3].innerText);
+        var fechaNacimientoString = table.rows[i].cells[3].innerText;
+        
+        var partesFecha = fechaNacimientoString.match(/(\d{4})(\d{2})(\d{2})/);
+        var fechaNacimientoObj = new Date(partesFecha[1], partesFecha[2] - 1, partesFecha[3]);
 
-        if (!isNaN(celdaEdad)) {
-            sumaEdades += celdaEdad;
-        }
+        var fechaActual = new Date();
+        var anoActual = fechaActual.getFullYear();
+
+        var edad = anoActual - fechaNacimientoObj.getFullYear();
+
+        sumaEdades += edad;
     }
 
     var cantidadFilasValidas = filas - 1;
     var edadPromedio = cantidadFilasValidas > 0 ? sumaEdades / cantidadFilasValidas : 0;
 
     var textEdadPromedio = document.getElementById("promedio");
-    textEdadPromedio.value = edadPromedio.toFixed(2); 
+    textEdadPromedio.value = edadPromedio.toFixed(2);
 
     return edadPromedio;
 }
@@ -320,7 +327,7 @@ function mostrarFormConDatos(tabla)
     
     var nombre = celdas[1].innerText;
     var apellido = celdas[2].innerText;
-    var edad = celdas[3].innerText;
+    var fechaNacimiento = celdas[3].innerText;
     var dni = celdas[4].innerText;
     var paisOrigen = celdas[5].innerText;
 
@@ -332,21 +339,21 @@ function mostrarFormConDatos(tabla)
 
     var indexForm = formAbm.getAttribute("index");
 
-    cargarForm(nombre, apellido, edad, dni, paisOrigen, index)
+    cargarForm(nombre, apellido, fechaNacimiento, dni, paisOrigen, index)
 
     formulario.style.display = (formulario.style.display === "none") ? "block" : "none";
     datosTabla.style.display = (datosTabla.style.display === "none") ? "block" : "none";
 }
 
-function cargarForm(nombre, apellido, edad, dni, paisOrigen, index)
+function cargarForm(nombre, apellido, fechaNacimiento, dni, paisOrigen, index)
 {
 
 
-    if (nombre !== null && apellido !== null && edad !== null && dni !== null && paisOrigen !== null) {
+    if (nombre !== null && apellido !== null && fechaNacimiento !== null && dni !== null && paisOrigen !== null) {
 
         document.getElementById("nombre").value = nombre;
         document.getElementById("apellido").value = apellido;
-        document.getElementById("edad").value = edad;
+        document.getElementById("fechaNacimiento").value = fechaNacimiento;
     
         var tipoPersonaSelect = document.getElementById("tipoPersona");
         var botonAgregar = document.getElementById("botonAgregar");
@@ -364,13 +371,13 @@ function modificarTabla(tabla)
 
     var nombre = document.getElementById("nombre").value;
     var apellido = document.getElementById("apellido").value;
-    var edad = document.getElementById("edad").value;
+    var fechaNacimiento = document.getElementById("fechaNacimiento").value;
     var dni = document.getElementById("dni").value;
     var paisOrigen = document.getElementById("paisOrigen").value;
 
     if(validar(tipoPersona.value, generarPersona()) == true) {
-        modificarPersona(index-1, nombre, apellido, edad, dni, paisOrigen);
-        actualizarTabla(index, nombre, apellido, edad, dni, paisOrigen);
+        modificarPersona(index-1, nombre, apellido, fechaNacimiento, dni, paisOrigen);
+        actualizarTabla(index, nombre, apellido, fechaNacimiento, dni, paisOrigen);
         alert("Modificado con exito");
     }else
     {
@@ -398,13 +405,13 @@ function EliminarFilaTabla() {
 }
 
 
-function actualizarTabla(index, nombre, apellido, edad, dni, paisOrigen) {
+function actualizarTabla(index, nombre, apellido, fechaNacimiento, dni, paisOrigen) {
     var fila = document.getElementById("tablaPersonas").rows[index];
 
     if (fila) {
         fila.cells[1].textContent = nombre;
         fila.cells[2].textContent = apellido;
-        fila.cells[3].textContent = edad;
+        fila.cells[3].textContent = fechaNacimiento;
         fila.cells[4].textContent = dni || '-';
         fila.cells[5].textContent = paisOrigen || '-';
 
@@ -458,7 +465,7 @@ function restablecerForm() {
 function ordenarPor(columna) {
     var tabla = document.getElementById("tablaPersonas");
     var filas = tabla.rows;
-    var esNumerico = ["id", "edad", "dni"];
+    var esNumerico = ["id", "fechaNacimiento", "dni"];
 
     var filasArray = Array.from(filas);
 
@@ -509,7 +516,7 @@ function obtenerArrayPersonas() {
             id: celdas[0].textContent,
             nombre: celdas[1].textContent,
             apellido: celdas[2].textContent,
-            edad: celdas[3].textContent,
+            fechaNacimiento: celdas[3].textContent,
             dni: celdas[4].textContent,
             paisOrigen: celdas[5].textContent,
         };
