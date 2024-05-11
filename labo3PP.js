@@ -162,7 +162,7 @@ function modificarPersona(index, nombre, apellido, fechaNacimiento, nuevoDni, nu
 
         console.log("Persona modificada:", listaPersonas[index].nombre);
     } else {
-        alert("Error en la modificacion");
+        alert("Error en la modificacion porque faltaron cargar datos");
     }
 }
 
@@ -390,7 +390,7 @@ function modificarTabla(tabla)
         alert("Modificado con exito");
     }else
     {
-        alert("Error al modificar, faltan datos para el tipo");
+        alert("Error al modificar, faltaron cargar datos");
     }
 
     restablecerForm();
