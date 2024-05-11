@@ -209,26 +209,30 @@ function validar(tipoPersona, persona) {
 }
 
 function calcularEdadPromedio() {
-    var table = document.getElementById("tablaPersonas");
-    var filas = table.rows.length;
+    var tabla = document.getElementById("tablaPersonas");
+    var filas = tabla.rows;
+    var filtro = document.getElementById("filtroPersona").value;
     var sumaEdades = 0;
+    var cantidadPersonas = 0;
 
-    for (var i = 1; i < filas; i++) {
-        var fechaNacimientoString = table.rows[i].cells[3].innerText;
-        
-        var partesFecha = fechaNacimientoString.match(/(\d{4})(\d{2})(\d{2})/);
-        var fechaNacimientoObj = new Date(partesFecha[1], partesFecha[2] - 1, partesFecha[3]);
+    for (var i = 1; i < filas.length; i++) {
+        var fila = filas[i];
+        var tipoPersona = fila.cells[4].textContent === "-" ? "extranjero" : "ciudadano";
 
-        var fechaActual = new Date();
-        var anoActual = fechaActual.getFullYear();
+        if (filtro === "todos" || tipoPersona === filtro) {
+            var fechaNacimientoString = fila.cells[3].innerText;
+            var partesFecha = fechaNacimientoString.match(/(\d{4})(\d{2})(\d{2})/);
+            var fechaNacimientoObj = new Date(partesFecha[1], partesFecha[2] - 1, partesFecha[3]);
+            var fechaActual = new Date();
+            var anoActual = fechaActual.getFullYear();
+            var edad = anoActual - fechaNacimientoObj.getFullYear();
 
-        var edad = anoActual - fechaNacimientoObj.getFullYear();
-
-        sumaEdades += edad;
+            sumaEdades += edad;
+            cantidadPersonas++;
+        }
     }
 
-    var cantidadFilasValidas = filas - 1;
-    var edadPromedio = cantidadFilasValidas > 0 ? sumaEdades / cantidadFilasValidas : 0;
+    var edadPromedio = cantidadPersonas > 0 ? sumaEdades / cantidadPersonas : 0;
 
     var textEdadPromedio = document.getElementById("promedio");
     textEdadPromedio.value = edadPromedio.toFixed(2);
