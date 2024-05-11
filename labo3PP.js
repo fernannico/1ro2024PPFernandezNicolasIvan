@@ -23,7 +23,7 @@ class Persona {
 
 // clase de ciudadano
 class Ciudadano extends Persona {
-    dni;     
+    dni = 0;     
 
     constructor(dni,  id, nombre, apellido, fechaNacimiento) {
         super(id, nombre, apellido, fechaNacimiento);
@@ -78,14 +78,19 @@ function generarPersona() {
     var dni = document.getElementById("dni").value;
     var paisOrigen = document.getElementById("paisOrigen").value;
 
-    var id = generarId();
+    if (fechaNacimiento.length === 8) {
+        var id = generarId();
 
-    let tipoPersona = document.getElementById("tipoPersona").value;
+        let tipoPersona = document.getElementById("tipoPersona").value;
 
-    if (tipoPersona === "ciudadano") {
-        return new Ciudadano(dni, id, nombre, apellido, fechaNacimiento);
+        if (tipoPersona === "ciudadano") {
+            return new Ciudadano(dni, id, nombre, apellido, fechaNacimiento);
+        } else {
+            return new Extranjero(paisOrigen, id,  nombre, apellido, fechaNacimiento);
+        }
     } else {
-        return new Extranjero(paisOrigen, id,  nombre, apellido, fechaNacimiento);
+        alert("La fecha de nacimiento debe ser AAAAMMDD.");
+        return null; // Retorna null para indicar que no se pudo crear la persona
     }
 
 }
@@ -103,8 +108,9 @@ function obtenerTipo(persona)
 function cargarPersona(tipo, persona) {
 
     alta = document.getElementById("formAbm").getAttribute("index");
+
     if(alta == -1)
-    {
+    {        
         if(validar(tipo, persona) == true)
         {
             var newRow = table.insertRow(table.rows.length);
@@ -137,11 +143,12 @@ function cargarPersona(tipo, persona) {
     }else{
         alert("Error, solo modificar o eliminar");
     }
+
 }
     
 // modifica la persona de listaPersonas
 function modificarPersona(index, nombre, apellido, fechaNacimiento, nuevoDni, nuevoPaisOrigen) {
-    
+
     if (index >= 0 && index < listaPersonas.length) {
         listaPersonas[index].nombre = nombre;
         listaPersonas[index].apellido = apellido;
@@ -221,11 +228,10 @@ function calcularEdadPromedio() {
 
         if (filtro === "todos" || tipoPersona === filtro) {
             var fechaNacimientoString = fila.cells[3].innerText;
-            var partesFecha = fechaNacimientoString.match(/(\d{4})(\d{2})(\d{2})/);
-            var fechaNacimientoObj = new Date(partesFecha[1], partesFecha[2] - 1, partesFecha[3]);
+            var anoNacimiento = parseInt(fechaNacimientoString.substring(0, 4)); // Extraer los primeros 4 dígitos del año
             var fechaActual = new Date();
             var anoActual = fechaActual.getFullYear();
-            var edad = anoActual - fechaNacimientoObj.getFullYear();
+            var edad = anoActual - anoNacimiento;
 
             sumaEdades += edad;
             cantidadPersonas++;
@@ -351,7 +357,6 @@ function mostrarFormConDatos(tabla)
 
 function cargarForm(nombre, apellido, fechaNacimiento, dni, paisOrigen, index)
 {
-
 
     if (nombre !== null && apellido !== null && fechaNacimiento !== null && dni !== null && paisOrigen !== null) {
 
